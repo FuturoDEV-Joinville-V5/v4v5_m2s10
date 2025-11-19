@@ -1,10 +1,11 @@
 package br.senai.lab365.produtoapi.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ProdutoCadastroRequest {
-  private String nome;
-  private String descricao;
-  private String fabricante;
-  private Double peso;
+  @NotBlank private String nome;
+  @NotBlank private String descricao;
+  @NotBlank private String fabricante;
 
   public String getNome() {
     return nome;
@@ -28,13 +29,5 @@ public class ProdutoCadastroRequest {
 
   public void setFabricante(final String fabricante) {
     this.fabricante = fabricante;
-  }
-
-  public Double getPeso() {
-    return peso;
-  }
-
-  public void setPeso(final Double peso) {
-    this.peso = peso;
   }
 }
