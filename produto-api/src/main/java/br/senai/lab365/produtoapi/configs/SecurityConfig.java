@@ -1,44 +1,54 @@
 package br.senai.lab365.produtoapi.configs;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+
   @Bean
-  public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+  public UserDetailsService userDetailsService() {
+    return new CustomUserDetailsService();
+  }
+
+  @Bean
+  public SecurityFilterChain filterChain(final HttpSecurity http, final JwtFilter jwtFilter)
+      throws Exception {
     http.authorizeHttpRequests(
             auth ->
-                auth.requestMatchers(HttpMethod.POST, "/usuarios")
+                auth.requestMatchers("/auth")
                     .permitAll()
+                    .requestMatchers("/usuarios", "/dashboard")
+                    .hasRole("ADMIN")
                     .anyRequest()
                     .authenticated())
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .csrf(AbstractHttpConfigurer::disable)
-        .httpBasic(withDefaults());
+        .sessionManagement(
+            s ->
+                s.sessionCreationPolicy(
+                    SessionCreationPolicy.STATELESS)) // Gerenciamento de sessão STATELESS
+        .httpBasic(Customizer.withDefaults())
+        .formLogin(AbstractHttpConfigurer::disable);
     return http.build();
   }
 
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  public UserDetailsService userDetailsService() {
-    return new CustomUserDetailsService();
   }
 
   @Bean

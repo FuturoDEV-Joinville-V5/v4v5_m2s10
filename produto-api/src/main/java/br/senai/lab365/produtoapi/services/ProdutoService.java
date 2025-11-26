@@ -6,6 +6,7 @@ import br.senai.lab365.produtoapi.dtos.ProdutoResumoResponse;
 import br.senai.lab365.produtoapi.mappers.ProdutoMapper;
 import br.senai.lab365.produtoapi.models.Produto;
 import br.senai.lab365.produtoapi.repositories.ProdutoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +39,10 @@ public class ProdutoService {
     final List<Produto> produtos = repository.findAll();
 
     return mapper.map(produtos);
+  }
+
+  public ProdutoCadastroResponse buscaProdutoEspecifico(final Long id) {
+    return mapper.mapToCadastroResponse(
+        repository.findById(id).orElseThrow(EntityNotFoundException::new));
   }
 }
