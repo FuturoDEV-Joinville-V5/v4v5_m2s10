@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,6 +20,8 @@ public class Produto {
   private double preco;
   private int qtdEstoque;
   private double peso;
+
+  @ManyToOne private Categoria categoria;
 
   public Produto() {}
 
@@ -81,5 +84,13 @@ public class Produto {
 
   public void setPeso(final double peso) {
     this.peso = peso;
+  }
+
+  public Categoria getCategoria() {
+    return categoria;
+  }
+
+  public void setCategoria(final Categoria categoria) {
+    this.categoria = categoria;
   }
 }

@@ -1,11 +1,14 @@
 package br.senai.lab365.produtoapi.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class ProdutoCadastroRequest {
   @NotBlank private String nome;
   @NotBlank private String descricao;
   @NotBlank private String fabricante;
+  @NotNull @Positive private Long categoriaId;
 
   public String getNome() {
     return nome;
@@ -29,5 +32,13 @@ public class ProdutoCadastroRequest {
 
   public void setFabricante(final String fabricante) {
     this.fabricante = fabricante;
+  }
+
+  public @NotNull Long getCategoriaId() {
+    return categoriaId;
+  }
+
+  public void setCategoriaId(@NotNull @Positive final Long categoriaId) {
+    this.categoriaId = categoriaId;
   }
 }
