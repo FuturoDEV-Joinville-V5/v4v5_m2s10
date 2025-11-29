@@ -29,9 +29,9 @@ public class SecurityConfig {
       throws Exception {
     http.authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/auth")
+                auth.requestMatchers("/auth", "/usuarios")
                     .permitAll()
-                    .requestMatchers("/usuarios", "/dashboard")
+                    .requestMatchers("/dashboard")
                     .hasRole("ADMIN")
                     .anyRequest()
                     .authenticated())

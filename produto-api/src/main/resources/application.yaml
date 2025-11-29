@@ -2,7 +2,7 @@ spring:
   application:
     name: produto-api
   datasource:
-    url: jdbc:postgresql://localhost/produtos
+    url: jdbc:postgresql://${DB_HOST:localhost}/produtos
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
